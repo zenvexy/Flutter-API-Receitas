@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 import '../api.dart';
+import '../receita_widget.dart';
 import 'formulario.dart';
 import 'splash.dart';
 
@@ -103,12 +105,25 @@ class _HomeState extends State<Home> {
                             ),
                             title: Text(nome),
                             subtitle: Text(_formatarCusto(item['custo'])),
-                            trailing: IconButton(
-                              tooltip: 'Excluir $nome',
-                              onPressed: id == null
-                                  ? null
-                                  : () => confirmaExcluir(id),
-                              icon: const Icon(Icons.delete_outline),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (ReceitaWidget.disponivel)
+                                  IconButton(
+                                    tooltip: 'Adicionar $nome à tela inicial',
+                                    onPressed: id == null
+                                        ? null
+                                        : () => _fixarWidget(item),
+                                    icon: const Icon(Icons.widgets_outlined),
+                                  ),
+                                IconButton(
+                                  tooltip: 'Excluir $nome',
+                                  onPressed: id == null
+                                      ? null
+                                      : () => confirmaExcluir(id),
+                                  icon: const Icon(Icons.delete_outline),
+                                ),
+                              ],
                             ),
                           );
                         },
@@ -205,6 +220,7 @@ class _HomeState extends State<Home> {
             .toList();
         _aplicarFiltros();
       });
+      unawaited(_atualizarWidget(receitas));
     } catch (erro) {
       if (!mounted) return;
       setState(
@@ -212,6 +228,27 @@ class _HomeState extends State<Home> {
       );
     } finally {
       if (mounted) setState(() => _carregando = false);
+    }
+  }
+
+  Future<void> _atualizarWidget(List<Map<String, dynamic>> lista) async {
+    try {
+      await ReceitaWidget.atualizar(lista);
+    } catch (_) {
+      // A lista de receitas continua disponível se o widget não atualizar.
+    }
+  }
+
+  Future<void> _fixarWidget(Map<String, dynamic> receita) async {
+    try {
+      final podeAdicionar = await ReceitaWidget.fixar(receita);
+      if (!podeAdicionar) {
+        _mostrarMensagem(
+          'Seu Android não permite adicionar o widget por aqui.',
+        );
+      }
+    } catch (_) {
+      _mostrarMensagem('Não foi possível adicionar o widget.');
     }
   }
 

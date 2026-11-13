@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/receita_widget_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    android:background="@drawable/receita_widget_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/receita_widget_imagem"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:contentDescription="@string/receita_widget_image_description"
+        android:scaleType="centerCrop"
+        android:src="@android:drawable/ic_menu_gallery" />
+
+    <TextView
+        android:id="@+id/receita_widget_nome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        android:paddingTop="6dp"
+        android:text="@string/receita_widget_default_name"
+        android:textColor="#3D291C"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+</LinearLayout>

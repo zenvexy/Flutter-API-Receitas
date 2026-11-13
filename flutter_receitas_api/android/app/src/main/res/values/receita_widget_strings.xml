@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="receita_widget_label">Receita</string>
+    <string name="receita_widget_default_name">Abra o app para ver receitas</string>
+    <string name="receita_widget_image_description">Foto da receita</string>
+</resources>
